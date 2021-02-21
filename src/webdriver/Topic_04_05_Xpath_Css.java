@@ -17,9 +17,19 @@ import junit.framework.Assert;
 
 public class Topic_04_05_Xpath_Css {
 	WebDriver driver;
+	String lastName ;
+	String firstName;
+	String email;
+	String pass;
 
 	@BeforeClass
 	public void beforeClass() {
+		String generatedString =generateStringForEmail();
+		 email = generatedString+ "@gmail.com" ;
+		 lastName = "Le";
+		 firstName = "Trang";
+		 pass = "Trang@123";
+		
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -40,7 +50,7 @@ public class Topic_04_05_Xpath_Css {
 	@Test
 	public void TC_02_LoginWithInvalidEmail() {
 		driver.findElement(By.xpath(".//*[@class='footer']//a[@title='My Account']")).click();
-		driver.findElement(By.xpath(".//*[@id='send2']")).click();
+		
 		driver.findElement(By.xpath(".//*[@id='email']")).sendKeys("12345@gmail.774343");
 		driver.findElement(By.xpath(".//*[@id='pass']")).sendKeys("123456");
 		driver.findElement(By.xpath(".//*[@id='send2']")).click();
@@ -51,7 +61,7 @@ public class Topic_04_05_Xpath_Css {
 	@Test
 	public void TC_03_LoginWIthPasswordLessThan6() {
 		driver.findElement(By.xpath(".//*[@class='footer']//a[@title='My Account']")).click();
-		driver.findElement(By.xpath(".//*[@id='send2']")).click();
+		
 		driver.findElement(By.xpath(".//*[@id='email']")).sendKeys("12345@gmail.com");
 		driver.findElement(By.xpath(".//*[@id='pass']")).sendKeys("12345");
 		driver.findElement(By.xpath(".//*[@id='send2']")).click();
@@ -62,7 +72,7 @@ public class Topic_04_05_Xpath_Css {
 	@Test
 	public void TC_04_LoginWithIncorrectEmailPassword() {
 		driver.findElement(By.xpath(".//*[@class='footer']//a[@title='My Account']")).click();
-		driver.findElement(By.xpath(".//*[@id='send2']")).click();
+	
 		driver.findElement(By.xpath(".//*[@id='email']")).sendKeys("automaton@gmail.com");
 		driver.findElement(By.xpath(".//*[@id='pass']")).sendKeys("123123123");
 		driver.findElement(By.xpath(".//*[@id='send2']")).click();
@@ -88,32 +98,102 @@ public class Topic_04_05_Xpath_Css {
 	
 	@Test
 	public void TC_05_CreateNewAccount() {
-		driver.findElement(By.xpath(".//*[@class='footer']//a[@title='My Account']")).click();
-		driver.findElement(By.xpath(".//*[@id='login-form']//a[@class='button']")).click();
+		driver.findElement(By.xpath("//*[@class='footer']//a[@title='My Account']")).click();
+		driver.findElement(By.xpath("//*[@id='login-form']//a[@class='button']")).click();
 		
-	    String generatedString =generateStringForEmail();
-	    String email = generatedString+ "@gmail.com" ;
-	    String lastName = "Le";
-	    String firstName ="Trang";
+	 
 	    
 	    driver.findElement(By.xpath(".//*[@id='firstname']")).sendKeys(firstName);
 	    driver.findElement(By.xpath(".//*[@id='lastname']")).sendKeys(lastName);
 	    driver.findElement(By.xpath(".//*[@id='email_address']")).sendKeys(email);
-	    driver.findElement(By.xpath(".//*[@id='password']")).sendKeys("Trang@123");
-	    driver.findElement(By.xpath(".//*[@id='confirmation']")).sendKeys("Trang@123");
+	    driver.findElement(By.xpath(".//*[@id='password']")).sendKeys(pass);
+	    driver.findElement(By.xpath(".//*[@id='confirmation']")).sendKeys(pass);
 	    driver.findElement(By.xpath(".//*[@id='is_subscribed']")).click();
 	    driver.findElement(By.xpath(".//*[@type=\"submit\" and @title=\"Register\" ]")).click();
 	   Assert.assertEquals("Thank you for registering with Main Website Store.", driver.findElement(By.cssSelector(".success-msg>ul>li>span")).getText());
-//	   String text =  driver.findElement(By.xpath(".//*[@class='col-1']//p")).getText();
-//	   System.out.println("Name : " + text);
-//	   List<String> result = Arrays.asList(text.split("<br/>"));
-//	   for(int i=0;i<result.size() ; i++) {
-//		   
-//		   System.out.println(result.get(i));
-//	   }
-//	   Assert.assertEquals(firstName + " " + lastName, result.get(0));
-//	   Assert.assertEquals(email, result.get(1));
+	   String text =  driver.findElement(By.xpath(".//*[@class='col-1']//p")).getText();
+
+	 text = stringToHTMLString(text);
+	   List<String> result = Arrays.asList(text.split("<br/>"));
+
+	   Assert.assertEquals(firstName + " " + lastName, result.get(0));
+	   Assert.assertEquals(email, result.get(1));
+	   driver.findElement(By.xpath(".//*[@id='header']//span[text()='Account']")).click();
+	   driver.findElement(By.xpath(".//*[@title='Log Out']")).click();
 	}
+	public  String stringToHTMLString(String string) {
+	    StringBuffer sb = new StringBuffer(string.length());
+	    // true if last char was blank
+	    boolean lastWasBlankChar = false;
+	    int len = string.length();
+	    char c;
+
+	    for (int i = 0; i < len; i++) {
+	        c = string.charAt(i);
+	        if (c == ' ') {
+	            // blank gets extra work,
+	            // this solves the problem you get if you replace all
+	            // blanks with &nbsp;, if you do that you loss 
+	            // word breaking
+	            if (lastWasBlankChar) {
+	                lastWasBlankChar = false;
+	                sb.append("&nbsp;");
+	            } else {
+	                lastWasBlankChar = true;
+	                sb.append(' ');
+	            }
+	        } else {
+	            lastWasBlankChar = false;
+	            //
+	            // HTML Special Chars
+	            if (c == '"')
+	                sb.append("&quot;");
+	            else if (c == '&')
+	                sb.append("&amp;");
+	            else if (c == '<')
+	                sb.append("&lt;");
+	            else if (c == '>')
+	                sb.append("&gt;");
+	            else if (c == '\n')
+	                // Handle Newline
+	                sb.append("<br/>");
+	            else {
+	                int ci = 0xffff & c;
+	                if (ci < 160)
+	                    // nothing special only 7 Bit
+	                    sb.append(c);
+	                else {
+	                    // Not 7 Bit use the unicode system
+	                    sb.append("&#");
+	                    sb.append(new Integer(ci).toString());
+	                    sb.append(';');
+	                }
+	            }
+	        }
+	    }
+	    return sb.toString();
+	}
+	
+	@Test 
+	public void TC_06_LoginWithValidEmailAndPassword() {
+		driver.findElement(By.xpath(".//*[@class='footer']//a[@title='My Account']")).click();
+		driver.findElement(By.xpath(".//*[@id='email']")).sendKeys(email);
+		driver.findElement(By.xpath(".//*[@id='pass']")).sendKeys(pass);
+		driver.findElement(By.xpath(".//*[@id='send2']")).click();
+		
+		Assert.assertTrue(driver.findElement(By.xpath("//h1[text()='My Dashboard']")).isDisplayed());
+		
+		Assert.assertEquals("Hello, "+ firstName + " " + lastName + "!", driver.findElement(By.xpath("//*[@class='hello']/strong")).getText());
+		 String text =  driver.findElement(By.xpath(".//*[@class='col-1']//p")).getText();
+
+		 text = stringToHTMLString(text);
+		   List<String> result = Arrays.asList(text.split("<br/>"));
+
+		   Assert.assertEquals(firstName + " " + lastName, result.get(0));
+		   Assert.assertEquals(email, result.get(1));
+	}
+	
+	
 	
 	@AfterClass
 	public void afterClass() {
