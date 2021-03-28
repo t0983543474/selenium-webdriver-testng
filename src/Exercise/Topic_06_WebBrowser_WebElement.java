@@ -63,11 +63,11 @@ public class Topic_06_WebBrowser_WebElement {
 		driver.get("http://live.demoguru99.com/");
 		driver.findElement(By.xpath("//div[@class=\"footer\"]//a[text()=\"My Account\"]")).click();
 	
-		Assert.assertTrue(driver.getPageSource().contains("LOGIN OR CREATE AN ACCOUNT"));
+		Assert.assertTrue(driver.getPageSource().contains("Login or Create an Account"));
 		
 		driver.findElement(By.xpath("//span[text()=\"Create an Account\"]")).click();
 		
-		Assert.assertTrue(driver.getPageSource().contains("CREATE AN ACCOUNT"));
+		Assert.assertTrue(driver.getPageSource().contains("Create an Account"));
 		
 	}
 	
