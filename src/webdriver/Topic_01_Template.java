@@ -41,5 +41,15 @@ public class Topic_01_Template {
 	public void afterClass() {
 		driver.quit();
 	}
+	
+	public void sleepSecond(long time) {
+		
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
