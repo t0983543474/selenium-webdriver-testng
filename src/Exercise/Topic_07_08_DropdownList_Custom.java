@@ -36,7 +36,7 @@ public class Topic_07_08_DropdownList_Custom {
 //		driver.get("");
 	}
 
-//	@Test
+	@Test
 	public void TC_01_JQuery() {
 		driver.get("https://jqueryui.com/resources/demos/selectmenu/default.html");
 		
@@ -45,14 +45,14 @@ public class Topic_07_08_DropdownList_Custom {
 		
 	}
 
-//	@Test
+	@Test
 	public void TC_02_ReactJs() {
 		driver.get("https://react.semantic-ui.com/maximize/dropdown-example-selection/");
 		selectItemInCustomDropdow("//div[@role=\"listbox\"]", "//div[@role=\"option\"]//span", "Justen Kitsune");
 		Assert.assertTrue(driver.findElement(By.xpath("//div[@role=\"alert\" and text()=\"Justen Kitsune\"]")).isDisplayed());
 	}
 
-//	@Test
+	@Test
 	public void TC_03_VueJs() {
 		driver.get("https://mikerodham.github.io/vue-dropdowns/");
 		selectItemInCustomDropdow("//li[@class=\"dropdown-toggle\"]", "//ul[@class=\"dropdown-menu\"]//a", "Second Option");
@@ -60,7 +60,7 @@ public class Topic_07_08_DropdownList_Custom {
 		
 	}
 
-	//@Test
+	@Test
 	public void TC_04_Angular(){
 		driver.get("https://ej2.syncfusion.com/angular/demos/?_ga=2.262049992.437420821.1575083417-524628264.1575083417#/material/drop-down-list/data-binding");
 		selectItemInCustomDropdow("//ejs-dropdownlist[@id=\"games\"]//span[contains(@class, \"e-search-icon\")]", "//ul[@id=\"games_options\"]//li", "Tennis");
@@ -69,7 +69,7 @@ public class Topic_07_08_DropdownList_Custom {
 		//sleepSecond(5);
 	}
 	
-	//@Test
+	@Test
 	public void TC_05_Editable() {
 		driver.get("https://react.semantic-ui.com/maximize/dropdown-example-search-selection/");
 		selectItemInEdibale("//input[@class=\"search\"]", "//span[@class=\"text\"]", "Belize");
